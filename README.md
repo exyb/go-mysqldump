@@ -11,7 +11,7 @@ import (
 	"os"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/jamf/go-mysqldump"
+	"github.com/exyb/go-mysqldump"
 )
 
 func main() {
@@ -60,5 +60,5 @@ func main() {
 }
 ```
 
-[![GoDoc](https://godoc.org/github.com/jamf/go-mysqldump?status.svg)](https://godoc.org/github.com/jamf/go-mysqldump)
-[![Build Status](https://travis-ci.org/jamf/go-mysqldump.svg?branch=master)](https://travis-ci.org/jamf/go-mysqldump)
+[![GoDoc](https://godoc.org/github.com/exyb/go-mysqldump?status.svg)](https://godoc.org/github.com/exyb/go-mysqldump)
+[![Build Status](https://travis-ci.org/exyb/go-mysqldump.svg?branch=master)](https://travis-ci.org/exyb/go-mysqldump)
