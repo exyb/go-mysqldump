@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 	"path"
+	"regexp"
+	"strings"
 	"time"
 )
 
@@ -14,19 +16,21 @@ Register a new dumper.
 
 	db: Database that will be dumped (https://golang.org/pkg/database/sql/#DB).
 	dir: Path to the directory where the dumps will be stored.
-	format: Format to be used to name each dump file. Uses time.Time.Format (https://golang.org/pkg/time/#Time.Format). format appended with '.sql'.
+	fileNamePrefix: FileName prefix
+	format:
+	- Format to be used to name each dump file. Uses time.Time.Format (https://golang.org/pkg/time/#Time.Format). format appended with '.sql'.
+	- General file name
 */
 func Register(db *sql.DB, dir, format string) (*Data, error) {
 	if !isDir(dir) {
 		return nil, errors.New("Invalid directory")
 	}
 
-	name := time.Now().Format(format)
-	p := path.Join(dir, name+".sql")
+	p := path.Join(dir, formatIfTimeFormat(format) +".sql")
 
 	// Check dump directory
 	if e, _ := exists(p); e {
-		return nil, errors.New("Dump '" + name + "' already exists.")
+		return nil, errors.New("Dump '" + p + "' already exists.")
 	}
 
 	// Create .sql file
@@ -83,4 +87,16 @@ func isDir(p string) bool {
 		return fi.Mode().IsDir()
 	}
 	return false
+}
+
+func formatIfTimeFormat(format string) string {
+	// 提取所有数字
+	re := regexp.MustCompile(`\d+`)
+	digits := strings.Join(re.FindAllString(format, -1), "")
+
+	// 检查是否包含标准时间序列
+	if strings.Contains(digits, "20060102150405") {
+		return time.Now().Format(format)
+	}
+	return format
 }
